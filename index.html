@@ -137,6 +137,24 @@
             font-style: italic;
         }
     </style>
+
+<!-- Firebase SDKs -->
+<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
+<script>
+  // TODO: Replace the below with your Firebase config
+  const firebaseConfig = {
+    apiKey: "YOUR_API_KEY",
+    authDomain: "your-project-id.firebaseapp.com",
+    projectId: "your-project-id",
+    storageBucket: "your-project-id.appspot.com",
+    messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+    appId: "YOUR_APP_ID"
+  };
+  firebase.initializeApp(firebaseConfig);
+  const db = firebase.firestore();
+</script>
+
 </head>
 <body class="font-sans">
     <!-- Navigation -->
@@ -443,126 +461,96 @@
             });
         });
 
-        // Alumni data storage
-        let alumniData = JSON.parse(localStorage.getItem('alumniData')) || [];
+        // Firebase Firestore logic inserted below
 
-        // Form submission handler
-        document.getElementById('alumniRegistrationForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            const name = document.getElementById('regName').value;
-            const year = document.getElementById('regYear').value;
-            const email = document.getElementById('regEmail').value;
-            const linkedin = document.getElementById('regLinkedIn').value;
-            const career = document.getElementById('regCareer').value;
-            const memories = document.getElementById('regMemories').value;
-            const photoFile = document.getElementById('regPhoto').files[0];
-            
-            if (!name || !year || !email || !career || !memories || !photoFile) {
-                alert('Please fill all fields');
-                return;
-            }
-            
-            // Read the photo file
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                const alumni = {
-                    id: Date.now(),
-                    name: name,
-                    year: year,
-                    email: email,
-                    career: career,
-                    memories: memories,
-                    linkedin: linkedin,
-                    photo: e.target.result
-                };
-                
-                // Add to alumni data
-                alumniData.push(alumni);
-                localStorage.setItem('alumniData', JSON.stringify(alumniData));
-                
-                // Update display
-                updateAlumniDisplay();
-                
-                // Reset form
-                document.getElementById('alumniRegistrationForm').reset();
-                
-                // Scroll to alumni section
-                document.getElementById('alumni').scrollIntoView({ behavior: 'smooth' });
-                
-                alert('Registration successful!');
-            };
-            reader.readAsDataURL(photoFile);
-        });
+const alumniCollection = db.collection("alumni");
 
-        // Update alumni display
-        function updateAlumniDisplay() {
-            const alumniGrid = document.getElementById('alumniGrid');
-            const noAlumniMessage = document.getElementById('noAlumniMessage');
-            
-            if (alumniData.length === 0) {
-                noAlumniMessage.style.display = 'block';
-                return;
-            }
-            
-            noAlumniMessage.style.display = 'none';
-            alumniGrid.innerHTML = '';
-            
-            alumniData.forEach(alumni => {
-                const alumniCard = document.createElement('div');
-                alumniCard.className = 'testimonial-card bg-white p-4 rounded-lg shadow-md cursor-pointer';
-                alumniCard.innerHTML = `
-                    <img src="${alumni.photo}" alt="${alumni.name}" class="w-full h-48 object-cover rounded-md mb-3" style="aspect-ratio: 3/4">
-                    <h3 class="font-semibold text-blue-900 text-center">${alumni.name}</h3>
-                    <p class="text-gray-600 text-sm text-center">Class of ${alumni.year}</p>
-                `;
-                
-                alumniCard.addEventListener('click', () => showAlumniDetails(alumni.id));
-                alumniGrid.appendChild(alumniCard);
-            });
-        }
+document.getElementById('alumniRegistrationForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    const name = document.getElementById('regName').value;
+    const year = document.getElementById('regYear').value;
+    const email = document.getElementById('regEmail').value;
+    const linkedin = document.getElementById('regLinkedIn').value;
+    const career = document.getElementById('regCareer').value;
+    const memories = document.getElementById('regMemories').value;
+    const photoFile = document.getElementById('regPhoto').files[0];
+    
+    if (!name || !year || !email || !career || !memories || !photoFile) {
+        alert('Please fill all fields');
+        return;
+    }
+    
+    const reader = new FileReader();
+    reader.onload = async function(e) {
+        const alumni = {
+            name,
+            year,
+            email,
+            career,
+            memories,
+            linkedin,
+            photo: e.target.result
+        };
+        await alumniCollection.add(alumni);
+        updateAlumniDisplay();
+        document.getElementById('alumniRegistrationForm').reset();
+        document.getElementById('alumni').scrollIntoView({ behavior: 'smooth' });
+        alert('Registration successful!');
+    };
+    reader.readAsDataURL(photoFile);
+});
 
-        // Show alumni details in modal
-        function showAlumniDetails(id) {
-            const alumni = alumniData.find(a => a.id === id);
-            if (!alumni) return;
-            
-            const modal = document.getElementById('alumniModal');
-            const modalContent = document.getElementById('modalContent');
-            
-            modalContent.innerHTML = `
-                <h2 class="text-2xl font-bold text-blue-900 mb-6">${alumni.name}</h2>
-                <div class="alumni-details">
-                    <img src="${alumni.photo}" alt="${alumni.name}" class="alumni-profile-img">
-                    <div class="alumni-info">
-                        <p><strong>Passout Year:</strong> ${alumni.year}</p>
-                        <p><strong>LinkedIn:</strong> <a href="${alumni.linkedin}" target="_blank" class="text-blue-600 underline">${alumni.linkedin}</a></p>
-                        <p><strong>Career:</strong> ${alumni.career}</p>
-                    </div>
-                </div>
-                <div class="alumni-memories mt-6">
-                    <h3 class="font-semibold mb-2">DAV Memories</h3>
-                    <p>${alumni.memories}</p>
-                </div>
-            `;
-            
-            modal.style.display = 'block';
-        }
+async function updateAlumniDisplay() {
+    const snapshot = await alumniCollection.get();
+    const alumniGrid = document.getElementById('alumniGrid');
+    const noAlumniMessage = document.getElementById('noAlumniMessage');
 
-        // Close modal
-        document.querySelector('.close').addEventListener('click', function() {
-            document.getElementById('alumniModal').style.display = 'none';
-        });
+    if (snapshot.empty) {
+        noAlumniMessage.style.display = 'block';
+        return;
+    }
 
-        // Close modal when clicking outside
-        window.addEventListener('click', function(event) {
-            const modal = document.getElementById('alumniModal');
-            if (event.target === modal) {
-                modal.style.display = 'none';
-            }
-        });
+    noAlumniMessage.style.display = 'none';
+    alumniGrid.innerHTML = '';
 
-        // Initialize display
+    snapshot.forEach(doc => {
+        const alumni = doc.data();
+        const alumniCard = document.createElement('div');
+        alumniCard.className = 'testimonial-card bg-white p-4 rounded-lg shadow-md cursor-pointer';
+        alumniCard.innerHTML = `
+            <img src="${alumni.photo}" alt="${alumni.name}" class="w-full h-48 object-cover rounded-md mb-3" style="aspect-ratio: 3/4">
+            <h3 class="font-semibold text-blue-900 text-center">${alumni.name}</h3>
+            <p class="text-gray-600 text-sm text-center">Class of ${alumni.year}</p>
+        `;
+        alumniCard.addEventListener('click', () => showAlumniDetails(alumni));
+        alumniGrid.appendChild(alumniCard);
+    });
+}
+
+function showAlumniDetails(alumni) {
+    const modal = document.getElementById('alumniModal');
+    const modalContent = document.getElementById('modalContent');
+
+    modalContent.innerHTML = `
+        <h2 class="text-2xl font-bold text-blue-900 mb-6">${alumni.name}</h2>
+        <div class="alumni-details">
+            <img src="${alumni.photo}" alt="${alumni.name}" class="alumni-profile-img">
+            <div class="alumni-info">
+                <p><strong>Passout Year:</strong> ${alumni.year}</p>
+                <p><strong>LinkedIn:</strong> <a href="${alumni.linkedin}" target="_blank" class="text-blue-600 underline">${alumni.linkedin}</a></p>
+                <p><strong>Career:</strong> ${alumni.career}</p>
+            </div>
+        </div>
+        <div class="alumni-memories mt-6">
+            <h3 class="font-semibold mb-2">DAV Memories</h3>
+            <p>${alumni.memories}</p>
+        </div>
+    `;
+    modal.style.display = 'block';
+}
+
+// Initialize display
         updateAlumniDisplay();
     </script>
 </body>
