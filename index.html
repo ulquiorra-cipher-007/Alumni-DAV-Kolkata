@@ -141,27 +141,20 @@
 <!-- Firebase SDKs -->
 <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
-// Import the functions you need from the SDKs you need
-import { initializeApp } from "firebase/app";
-import { getAnalytics } from "firebase/analytics";
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
-
-// Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
-const firebaseConfig = {
-  apiKey: "AIzaSyDAZ7F1Cr-ePvZFuBRe80UI-m-Jc05dEDQ",
-  authDomain: "alumni-dav-kolkata.firebaseapp.com",
-  projectId: "alumni-dav-kolkata",
-  storageBucket: "alumni-dav-kolkata.firebasestorage.app",
-  messagingSenderId: "935047606007",
-  appId: "1:935047606007:web:ce001e2a62023b0be96df2",
-  measurementId: "G-5FXLH5C9E4"
-};
-
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const analytics = getAnalytics(app);
+<script>
+  // TODO: Replace the below with your Firebase config
+  const firebaseConfig = {
+      apiKey: "AIzaSyDAZ7F1Cr-ePvZFuBRe80UI-m-Jc05dEDQ",
+      authDomain: "alumni-dav-kolkata.firebaseapp.com",
+      projectId: "alumni-dav-kolkata",
+      storageBucket: "alumni-dav-kolkata.firebasestorage.app",
+      messagingSenderId: "935047606007",
+      appId: "1:935047606007:web:ce001e2a62023b0be96df2",
+      measurementId: "G-5FXLH5C9E4"
+  };
+  firebase.initializeApp(firebaseConfig);
+  const db = firebase.firestore();
+</script>
 
 </head>
 <body class="font-sans">
