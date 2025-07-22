@@ -466,7 +466,7 @@
 
 const alumniCollection = db.collection("alumni");
 
-document.getElementById('alumniRegistrationForm').addEventListener('submit', function(e) {
+document.getElementById('alumniRegistrationForm').addEventListener('submit', async function(e) {
     e.preventDefault();
     
     const name = document.getElementById('regName').value;
@@ -479,6 +479,16 @@ document.getElementById('alumniRegistrationForm').addEventListener('submit', fun
     
     if (!name || !year || !email || !career || !memories || !photoFile) {
         alert('Please fill all fields');
+        return;
+    }
+    
+    // Check if alumni already exists
+    const querySnapshot = await alumniCollection
+        .where("email", "==", email)
+        .get();
+    
+    if (!querySnapshot.empty) {
+        alert('Alumni details already exist');
         return;
     }
     
@@ -551,8 +561,21 @@ function showAlumniDetails(alumni) {
     modal.style.display = 'block';
 }
 
+// Close modal when clicking on X
+document.querySelector('.close').addEventListener('click', function() {
+    document.getElementById('alumniModal').style.display = 'none';
+});
+
+// Close modal when clicking outside of it
+window.addEventListener('click', function(event) {
+    const modal = document.getElementById('alumniModal');
+    if (event.target === modal) {
+        modal.style.display = 'none';
+    }
+});
+
 // Initialize display
-        updateAlumniDisplay();
+updateAlumniDisplay();
     </script>
 </body>
 </html>
