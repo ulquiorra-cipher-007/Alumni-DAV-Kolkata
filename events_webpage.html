@@ -1,248 +1,199 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Events - Alumni DAV Kolkata</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Events - Alumni DAV Kolkata</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"/>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
 
-    <style>
-        * {
-            box-sizing: border-box;
-        }
+    body {
+      font-family: 'Segoe UI', 'Helvetica Neue', sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f4f6f9;
+      color: #333;
+    }
 
-        body {
-            font-family: 'Roboto', sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #004080;
-        }
+    header {
+      background-color: #003366;
+      color: white;
+      padding: 20px 0;
+      text-align: center;
+    }
 
-        header {
-            background: linear-gradient(135deg, #35424a, #2c3e50);
-            color: #ffffff;
-            padding: 20px 0;
-            text-align: center;
-            position: relative;
-            overflow: hidden;
-        }
+    header h1 {
+      margin: 0;
+      font-size: 2.4em;
+    }
 
-        header h1 {
-            margin: 0;
-            font-size: 2.5em;
-            animation: fadeIn 1s ease-in-out;
-        }
+    nav ul {
+      list-style: none;
+      padding: 0;
+      margin-top: 10px;
+    }
 
-        nav ul {
-            list-style: none;
-            padding: 0;
-        }
+    nav ul li {
+      display: inline;
+      margin: 0 15px;
+    }
 
-        nav ul li {
-            display: inline;
-            margin: 0 15px;
-        }
+    nav ul li a {
+      color: #ffffff;
+      text-decoration: none;
+      font-weight: 500;
+    }
 
-        nav ul li a {
-            color: #ffffff;
-            text-decoration: none;
-            font-weight: bold;
-            transition: color 0.3s;
-        }
+    nav ul li a:hover {
+      text-decoration: underline;
+    }
 
-        nav ul li a:hover {
-            color: #f39c12;
-        }
+    main {
+      padding: 30px 20px;
+      max-width: 900px;
+      margin: auto;
+    }
 
-        main {
-            padding: 20px;
-        }
+    .event-form, .events-list, .comments-section {
+      background: #ffffff;
+      margin: 20px 0;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      padding: 20px;
+    }
 
-        .event-form, .events-list, .comments-section {
-            background: #ffffff;
-            margin: 20px 0;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            padding: 20px;
-            animation: slideIn 0.5s ease-in-out;
-        }
+    h2 {
+      color: #003366;
+    }
 
-        .event-form h2, .events-list h2, .comments-section h2 {
-            color: #35424a;
-        }
+    input, textarea {
+      width: 100%;
+      padding: 12px;
+      margin: 10px 0;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 1em;
+    }
 
-        input, textarea {
-            width: 100%;
-            padding: 10px;
-            margin: 10px 0;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            transition: border 0.3s;
-        }
+    input:focus, textarea:focus {
+      border-color: #007bff;
+      outline: none;
+    }
 
-        input:focus, textarea:focus {
-            border: 1px solid #35424a;
-        }
+    button {
+      background: #0056b3;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 6px;
+      font-size: 1em;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
 
-        button {
-            background: #35424a;
-            color: #ffffff;
-            border: none;
-            padding: 10px 15px;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background 0.3s;
-        }
+    button:hover {
+      background: #00408a;
+    }
 
-        button:hover {
-            background: #2c3e50;
-        }
+    .events-list, .comments-section {
+      max-height: 400px;
+      overflow-y: auto;
+    }
 
-        .events-list {
-            max-height: 400px;
-            overflow-y: auto;
-        }
+    .event-item, .comment-item {
+      background: #eef3fa;
+      margin: 10px 0;
+      padding: 12px 15px;
+      border-left: 4px solid #007bff;
+      border-radius: 5px;
+    }
 
-        .event-item {
-            background: #e7f3fe;
-            border-left: 5px solid #2196F3;
-            margin: 10px 0;
-            padding: 10px;
-            border-radius: 5px;
-            transition: transform 0.3s;
-        }
-
-        .event-item:hover {
-            transform: scale(1.02);
-        }
-
-        .comments-section {
-            max-height: 400px;
-            overflow-y: auto;
-        }
-
-        .comment-item {
-            background: #f9f9f9;
-            border-left: 5px solid #4CAF50;
-            margin: 10px 0;
-            padding: 10px;
-            border-radius: 5px;
-        }
-
-        footer {
-            text-align: center;
-            padding: 20px 0;
-            background: #35424a;
-            color: #ffffff;
-            position: relative;
-            bottom: 0;
-            width: 100%;
-        }
-
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-            }
-            to {
-                opacity: 1;
-            }
-        }
-
-        @keyframes slideIn {
-            from {
-                transform: translateY(20px);
-                opacity: 0;
-            }
-            to {
-                transform: translateY(0);
-                opacity: 1;
-            }
-        }
-    </style>
+    footer {
+      text-align: center;
+      padding: 20px 0;
+      background: #003366;
+      color: white;
+      margin-top: 30px;
+    }
+  </style>
 </head>
 <body>
-    <header>
-        <h1>Upcoming Events</h1>
-        <nav>
-            <ul>
-                <li><a href="index.html">Home</a></li>
-                <li><a href="gallery.html">Gallery</a></li>
-                <li><a href="contact.html">Contact</a></li>
-            </ul>
-        </nav>
-    </header>
-    <main>
-        <section class="event-form">
-            <h2>Add a New Event</h2>
-            <form id="eventForm">
-                <input type="text" id="eventTitle" placeholder="Event Title" required>
-                <input type="date" id="eventDate" required>
-                <input type="text" id="eventTime" placeholder="Event Time" required>
-                <input type="text" id="eventLocation" placeholder="Event Location" required>
-                <textarea id="eventDescription" placeholder="Event Description" required></textarea>
-                <button type="submit">Add Event</button>
-            </form>
-        </section>
-        <section class="events-list">
-            <h2>Events List</h2>
-            <div id="eventsContainer"></div>
-        </section>
-        <section class="comments-section">
-            <h2>Comments</h2>
-            <form id="commentForm">
-                <input type="text" id="commentName" placeholder="Your Name" required>
-                <textarea id="commentText" placeholder="Your Comment" required></textarea>
-                <button type="submit">Submit Comment</button>
-            </form>
-            <div id="commentsContainer"></div>
-        </section>
-    </main>
-    <footer>
-        <p>&copy; 2025 Alumni DAV Kolkata</p>
-    </footer>
+  <header>
+    <h1>Upcoming Events</h1>
+    <nav>
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="gallery.html">Gallery</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+    </nav>
+  </header>
+  <main>
+    <section class="event-form">
+      <h2>Add a New Event</h2>
+      <form id="eventForm">
+        <input type="text" id="eventTitle" placeholder="Event Title" required />
+        <input type="date" id="eventDate" required />
+        <input type="text" id="eventTime" placeholder="Event Time" required />
+        <input type="text" id="eventLocation" placeholder="Event Location" required />
+        <textarea id="eventDescription" placeholder="Event Description" required></textarea>
+        <button type="submit">Add Event</button>
+      </form>
+    </section>
+    <section class="events-list">
+      <h2>Events List</h2>
+      <div id="eventsContainer"></div>
+    </section>
+    <section class="comments-section">
+      <h2>Comments</h2>
+      <form id="commentForm">
+        <input type="text" id="commentName" placeholder="Your Name" required />
+        <textarea id="commentText" placeholder="Your Comment" required></textarea>
+        <button type="submit">Submit Comment</button>
+      </form>
+      <div id="commentsContainer"></div>
+    </section>
+  </main>
+  <footer>
+    <p>&copy; 2025 Alumni DAV Kolkata</p>
+  </footer>
+  <script>
+    document.getElementById('eventForm').addEventListener('submit', function(event) {
+      event.preventDefault();
+      const title = document.getElementById('eventTitle').value;
+      const date = document.getElementById('eventDate').value;
+      const time = document.getElementById('eventTime').value;
+      const location = document.getElementById('eventLocation').value;
+      const description = document.getElementById('eventDescription').value;
+      const eventItem = document.createElement('div');
+      eventItem.classList.add('event-item');
+      eventItem.innerHTML = \`
+        <h3>\${title}</h3>
+        <p><strong>Date:</strong> \${date}</p>
+        <p><strong>Time:</strong> \${time}</p>
+        <p><strong>Location:</strong> \${location}</p>
+        <p>\${description}</p>
+      \`;
+      document.getElementById('eventsContainer').appendChild(eventItem);
+      document.getElementById('eventForm').reset();
+    });
 
-    <script>
-        document.getElementById('eventForm').addEventListener('submit', function(event) {
-            event.preventDefault();
-            
-            const title = document.getElementById('eventTitle').value;
-            const date = document.getElementById('eventDate').value;
-            const time = document.getElementById('eventTime').value;
-            const location = document.getElementById('eventLocation').value;
-            const description = document.getElementById('eventDescription').value;
-
-            const eventItem = document.createElement('div');
-            eventItem.classList.add('event-item');
-            eventItem.innerHTML = `
-                <h3>${title}</h3>
-                <p><strong>Date:</strong> ${date}</p>
-                <p><strong>Time:</strong> ${time}</p>
-                <p><strong>Location:</strong> ${location}</p>
-                <p>${description}</p>
-            `;
-            
-            document.getElementById('eventsContainer').appendChild(eventItem);
-            
-            document.getElementById('eventForm').reset();
-        });
-
-        document.getElementById('commentForm').addEventListener('submit', function(event) {
-            event.preventDefault();
-            
-            const name = document.getElementById('commentName').value;
-            const comment = document.getElementById('commentText').value;
-
-            const commentItem = document.createElement('div');
-            commentItem.classList.add('comment-item');
-            commentItem.innerHTML = `
-                <strong>${name}</strong>
-                <p>${comment}</p>
-            `;
-            
-            document.getElementById('commentsContainer').appendChild(commentItem);
-            
-            document.getElementById('commentForm').reset();
-        });
-    </script>
+    document.getElementById('commentForm').addEventListener('submit', function(event) {
+      event.preventDefault();
+      const name = document.getElementById('commentName').value;
+      const comment = document.getElementById('commentText').value;
+      const commentItem = document.createElement('div');
+      commentItem.classList.add('comment-item');
+      commentItem.innerHTML = \`
+        <strong>\${name}</strong>
+        <p>\${comment}</p>
+      \`;
+      document.getElementById('commentsContainer').appendChild(commentItem);
+      document.getElementById('commentForm').reset();
+    });
+  </script>
 </body>
 </html>
